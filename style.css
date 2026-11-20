@@ -41,7 +41,9 @@ body {
 }
 
 .tab-content.active {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .container {
@@ -55,7 +57,7 @@ h1, h2 {
     text-align: center;
 }
 
-#message {
+#message, #sudoku-message {
     height: 20px;
     margin: 10px 0;
     font-weight: bold;
@@ -113,8 +115,24 @@ h1, h2 {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1.2rem;
+    font-size: 1.5rem;
+    color: #538d4e;
+    cursor: pointer;
+    user-select: none;
+}
+
+.sudoku-cell.fixed {
     color: #ffffff;
+    font-weight: bold;
+    cursor: default;
+}
+
+.sudoku-cell.selected {
+    background-color: #3a3a3c;
+}
+
+.sudoku-cell.error {
+    color: #e23636;
 }
 
 .sudoku-cell:nth-child(3n) {
@@ -125,4 +143,3 @@ h1, h2 {
 .sudoku-cell:nth-child(n+46):nth-child(-n+54) {
     border-bottom: 2px solid #565758;
 }
-

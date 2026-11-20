@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Hub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="tabs">
+        <button class="tab-button active" onclick="openTab(event, 'wordle')">Weekly Wordle</button>
+        <button class="tab-button" onclick="openTab(event, 'sudoku')">Sudoku</button>
+        <button class="tab-button" onclick="openTab(event, 'crossword')">Crossword</button>
+    </div>
+
+    <div id="wordle" class="tab-content active">
+        <div class="container">
+            <h1>Weekly Wordle</h1>
+            <h2>Week <span id="week-display">...</span></h2>
+            <div id="message"></div>
+            <div id="board"></div>
+            <p class="instructions">Type using your physical keyboard. Press Enter to submit.</p>
+        </div>
+    </div>
+
+    <div id="sudoku" class="tab-content">
+        <div class="container">
+            <h1>Daily Sudoku</h1>
+            <div id="sudoku-board"></div>
+            <p class="instructions">Sudoku logic and puzzle generation to be implemented.</p>
+        </div>
+    </div>
+
+    <div id="crossword" class="tab-content">
+        <div class="container">
+            <h1>Mini Crossword</h1>
+            <div id="crossword-board"></div>
+            <p class="instructions">Crossword logic and clues to be implemented.</p>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

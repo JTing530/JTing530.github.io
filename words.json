@@ -1,10 +1,6 @@
 {
   "custom": [
-    "coder",
-    "repos",
-    "pages",
-    "build",
-    "clone"
+    "szabo"
   ],
   "standard": [
     "tiger", "panda", "snake", "shark", "whale", "eagle", "raven", "rhino", "hippo", "moose",

@@ -9,8 +9,7 @@
 <body>
     <div class="tabs">
         <button class="tab-button active" onclick="openTab(event, 'wordle')">Weekly Wordle</button>
-        <button class="tab-button" onclick="openTab(event, 'sudoku')">Sudoku</button>
-        <button class="tab-button" onclick="openTab(event, 'crossword')">Crossword</button>
+        <button class="tab-button" onclick="openTab(event, 'sudoku')">Weekly Sudoku</button>
     </div>
 
     <div id="wordle" class="tab-content active">
@@ -25,17 +24,10 @@
 
     <div id="sudoku" class="tab-content">
         <div class="container">
-            <h1>Daily Sudoku</h1>
+            <h1>Weekly Sudoku</h1>
+            <h2>Week <span id="sudoku-week-display">...</span></h2>
             <div id="sudoku-board"></div>
             <p class="instructions">Sudoku logic and puzzle generation to be implemented.</p>
-        </div>
-    </div>
-
-    <div id="crossword" class="tab-content">
-        <div class="container">
-            <h1>Mini Crossword</h1>
-            <div id="crossword-board"></div>
-            <p class="instructions">Crossword logic and clues to be implemented.</p>
         </div>
     </div>
 

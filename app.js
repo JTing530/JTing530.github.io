@@ -28,11 +28,16 @@ async function init() {
 
         const now = new Date();
         const diffTime = now - START_DATE;
+        
+        // Calculates total continuous weeks since START_DATE (does not reset yearly)
         const weekNumber = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 7)) + 1;
 
         document.getElementById('week-display').innerText = weekNumber;
+        document.getElementById('sudoku-week-display').innerText = weekNumber;
 
-        targetWord = allWords[weekNumber % allWords.length].toUpperCase();
+        // (weekNumber - 1) ensures Week 1 uses index 0, Week 2 uses index 1, etc.
+        // It iterates sequentially, guaranteeing no repeats until every word is used once.
+        targetWord = allWords[(weekNumber - 1) % allWords.length].toUpperCase();
 
         createBoard();
         drawPlaceholderBoards();
@@ -64,21 +69,6 @@ function drawPlaceholderBoards() {
         const cell = document.createElement('div');
         cell.classList.add('sudoku-cell');
         sudokuBoard.appendChild(cell);
-    }
-
-    const crosswordBoard = document.getElementById('crossword-board');
-    const layout = [
-        0, 0, 0, 1, 1,
-        0, 0, 0, 0, 1,
-        0, 0, 0, 0, 0,
-        1, 0, 0, 0, 0,
-        1, 1, 0, 0, 0
-    ];
-    for(let i = 0; i < 25; i++) {
-        const cell = document.createElement('div');
-        cell.classList.add('crossword-cell');
-        if(layout[i] === 1) cell.classList.add('black');
-        crosswordBoard.appendChild(cell);
     }
 }
 

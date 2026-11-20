@@ -4,12 +4,16 @@ if (!window.gameInitialized) {
     const START_DATE = new Date('2024-01-01T00:00:00');
     let weekNumber = 1;
 
+    // Wordle Variables
     let targetWord = "";
+    let validWords = new Set();
+    let dictionaryArray = [];
     let currentRow = 0;
     let currentTile = 0;
     let gameOver = false;
     let boardState = Array(6).fill().map(() => Array(5).fill(''));
 
+    // Sudoku Variables
     let sudokuSolution = [];
     let sudokuPuzzle = [];
     let currentSudokuState = [];
@@ -41,20 +45,38 @@ if (!window.gameInitialized) {
         document.getElementById('sudoku-week-display').innerText = weekNumber;
 
         createWordleBoard();
+        await loadExternalDictionary();
         
-        try {
-            const response = await fetch('words.json');
-            const data = await response.json();
-            const allWords = [...data.custom, ...data.standard];
-            targetWord = allWords[(weekNumber - 1) % allWords.length].toUpperCase();
-        } catch (error) {
-            showMessage("Error loading words.json. Make sure the file is uploaded to GitHub.");
-        }
-
         generateSudokuBoard(weekNumber);
         createSudokuBoard();
 
         document.addEventListener('keydown', handleKeyPress);
+    }
+
+    // Fetches a standard 5-letter word dictionary from a public repo
+    async function loadExternalDictionary() {
+        try {
+            showMessage("Loading dictionary...");
+            const response = await fetch('https://raw.githubusercontent.com/charlesreid1/five-letter-words/master/sgb-words.txt');
+            const text = await response.text();
+            
+            dictionaryArray = text.split('\n').map(w => w.trim().toUpperCase()).filter(w => w.length === 5);
+            validWords = new Set(dictionaryArray);
+            
+            // Pick a deterministic target word based on the week number
+            if (dictionaryArray.length > 0) {
+                targetWord = dictionaryArray[(weekNumber * 997) % dictionaryArray.length];
+                document.getElementById('message').innerText = ''; // Clear loading
+            } else {
+                throw new Error("Empty list");
+            }
+        } catch (error) {
+            // Fallback just in case the external URL fails
+            console.error("Dictionary fetch failed, using fallback", error);
+            dictionaryArray = ["APPLE", "TRAIN", "GHOST", "PLANT", "WATER"];
+            validWords = new Set(dictionaryArray);
+            targetWord = dictionaryArray[weekNumber % dictionaryArray.length];
+        }
     }
 
     function createWordleBoard() {
@@ -104,10 +126,27 @@ if (!window.gameInitialized) {
     function submitGuess() {
         if (currentTile !== 5) {
             showMessage("Not enough letters");
+            shakeRow();
             return;
         }
+        
         const guess = boardState[currentRow].join('');
+        
+        // Dictionary check
+        if (!validWords.has(guess)) {
+            showMessage("Not in word list");
+            shakeRow();
+            return;
+        }
+
         checkGuess(guess);
+    }
+
+    function shakeRow() {
+        const row = document.getElementById(`row-${currentRow}`);
+        row.classList.remove('shake');
+        void row.offsetWidth; // Trigger reflow to restart animation
+        row.classList.add('shake');
     }
 
     function checkGuess(guess) {
@@ -153,10 +192,13 @@ if (!window.gameInitialized) {
         const msgDiv = document.getElementById('message');
         msgDiv.innerText = msg;
         setTimeout(() => { 
-            if (!gameOver) msgDiv.innerText = ''; 
+            if (!gameOver && msg !== "Loading dictionary...") msgDiv.innerText = ''; 
         }, 2000);
     }
 
+    // --- SUDOKU LOGIC AND GENERATION ---
+
+    // Seeded Random Number Generator
     function mulberry32(a) {
         return function() {
           var t = a += 0x6D2B79F5;
@@ -166,9 +208,11 @@ if (!window.gameInitialized) {
         }
     }
 
+    // Generates a fully valid, unique Sudoku board from scratch using the week as a seed
     function generateSudokuBoard(seed) {
         const rng = mulberry32(seed);
         
+        // Base valid grid
         let board = [
             [1,2,3,4,5,6,7,8,9],
             [4,5,6,7,8,9,1,2,3],
@@ -181,6 +225,7 @@ if (!window.gameInitialized) {
             [9,7,8,3,1,2,6,4,5]
         ];
 
+        // 1. Shuffle numbers globally
         let nums = [1,2,3,4,5,6,7,8,9];
         for (let i = nums.length - 1; i > 0; i--) {
             const j = Math.floor(rng() * (i + 1));
@@ -192,6 +237,7 @@ if (!window.gameInitialized) {
             }
         }
 
+        // 2. Shuffle rows within bands (3x3 horizontal blocks)
         for(let band = 0; band < 3; band++) {
             for(let i = 0; i < 3; i++) {
                 let j = Math.floor(rng() * 3);
@@ -201,6 +247,7 @@ if (!window.gameInitialized) {
             }
         }
 
+        // 3. Shuffle columns within stacks (3x3 vertical blocks)
         for(let band = 0; band < 3; band++) {
             for(let i = 0; i < 3; i++) {
                 let j = Math.floor(rng() * 3);
@@ -212,15 +259,18 @@ if (!window.gameInitialized) {
             }
         }
 
+        // Save complete valid solution
         sudokuSolution = JSON.parse(JSON.stringify(board));
         sudokuPuzzle = JSON.parse(JSON.stringify(board));
 
+        // 4. Punch holes (remove numbers) to create the puzzle
         let positions = Array.from({length: 81}, (_, i) => i);
         for(let i = positions.length - 1; i > 0; i--) {
             let j = Math.floor(rng() * (i + 1));
             [positions[i], positions[j]] = [positions[j], positions[i]];
         }
         
+        // Remove 45 numbers for a moderate difficulty
         for(let i = 0; i < 45; i++) {
             let r = Math.floor(positions[i]/9);
             let c = positions[i]%9;

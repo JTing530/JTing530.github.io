@@ -125,28 +125,3 @@ h1, h2 {
 .sudoku-cell:nth-child(n+46):nth-child(-n+54) {
     border-bottom: 2px solid #565758;
 }
-
-#crossword-board {
-    display: grid;
-    grid-template-columns: repeat(5, 50px);
-    grid-template-rows: repeat(5, 50px);
-    gap: 2px;
-    background-color: #3a3a3c;
-    margin-bottom: 20px;
-    padding: 2px;
-}
-
-.crossword-cell {
-    background-color: #ffffff;
-    color: #000000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.5rem;
-    font-weight: bold;
-    text-transform: uppercase;
-}
-
-.crossword-cell.black {
-    background-color: #121213;
-}

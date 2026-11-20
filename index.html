@@ -8,8 +8,8 @@
 </head>
 <body>
     <div class="tabs">
-        <button class="tab-button active" onclick="openTab(event, 'wordle')">Weekly Wordle</button>
-        <button class="tab-button" onclick="openTab(event, 'sudoku')">Weekly Sudoku</button>
+        <button class="tab-button active" data-tab="wordle">Weekly Wordle</button>
+        <button class="tab-button" data-tab="sudoku">Weekly Sudoku</button>
     </div>
 
     <div id="wordle" class="tab-content active">
@@ -26,12 +26,12 @@
         <div class="container">
             <h1>Weekly Sudoku</h1>
             <h2>Week <span id="sudoku-week-display">...</span></h2>
+            <div id="sudoku-message"></div>
             <div id="sudoku-board"></div>
-            <p class="instructions">Sudoku logic and puzzle generation to be implemented.</p>
+            <p class="instructions">Click a cell and type 1-9 to fill. Use Backspace to clear.</p>
         </div>
     </div>
 
     <script src="app.js"></script>
 </body>
 </html>
-

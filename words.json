@@ -1,0 +1,16 @@
+{
+  "custom": [
+    "coder",
+    "repos",
+    "pages",
+    "build",
+    "clone"
+  ],
+  "standard": [
+    "apple",
+    "grape",
+    "mango",
+    "peach",
+    "berry"
+  ]
+}

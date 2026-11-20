@@ -27,13 +27,8 @@ body {
     transition: background-color 0.2s;
 }
 
-.tab-button:hover {
-    background-color: #565758;
-}
-
-.tab-button.active {
-    background-color: #538d4e;
-}
+.tab-button:hover { background-color: #565758; }
+.tab-button.active { background-color: #538d4e; }
 
 .tab-content {
     display: none;
@@ -52,10 +47,7 @@ body {
     align-items: center;
 }
 
-h1, h2 {
-    margin: 5px 0;
-    text-align: center;
-}
+h1, h2 { margin: 5px 0; text-align: center; }
 
 #message, #sudoku-message {
     height: 20px;
@@ -75,6 +67,16 @@ h1, h2 {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     grid-gap: 5px;
+}
+
+.row.shake {
+    animation: shake 0.5s;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
 }
 
 .tile {
@@ -127,20 +129,9 @@ h1, h2 {
     cursor: default;
 }
 
-.sudoku-cell.selected {
-    background-color: #3a3a3c;
-}
+.sudoku-cell.selected { background-color: #3a3a3c; }
+.sudoku-cell.error { color: #e23636; }
 
-.sudoku-cell.error {
-    color: #e23636;
-}
-
-.sudoku-cell:nth-child(3n) {
-    border-right: 2px solid #565758;
-}
-
+.sudoku-cell:nth-child(3n) { border-right: 2px solid #565758; }
 .sudoku-cell:nth-child(n+19):nth-child(-n+27),
-.sudoku-cell:nth-child(n+46):nth-child(-n+54) {
-    border-bottom: 2px solid #565758;
-}
-
+.sudoku-cell:nth-child(n+46):nth-child(-n+54) { border-bottom: 2px solid #565758; }
